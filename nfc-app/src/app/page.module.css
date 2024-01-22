@@ -1,10 +1,13 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
+  gap: 1rem;
+  padding: 1rem;
   min-height: 100vh;
+}
+
+.main img {
+  width: 100%;
 }
 
 .description {
@@ -32,6 +35,15 @@
   background-color: rgba(var(--callout-rgb), 0.5);
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   border-radius: var(--border-radius);
+}
+
+.token {
+  background-color: #000;
+  color: #fff;
+  max-width: fit-content;
+  margin: 0 auto;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8em;
 }
 
 .code {

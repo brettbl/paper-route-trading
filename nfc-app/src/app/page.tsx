@@ -1,95 +1,66 @@
+'use client'
+
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import styles from "./page.module.css";
+import getInventoryItem from "@/pages/api/getInventoryItem";
+import getProduct from "@/pages/api/getProduct";
+import { useEffect, useState } from "react";
+
+interface Product {
+  Name: string;
+  Description: string;
+  ProductType: string;
+  SKU: string;
+  SmartContract: string;
+  Image: string;
+}
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const pk = searchParams?.get('pk1') 
+  const [productId, setProductId] = useState(null);
+  const [product, setProduct] = useState<Product | null>(null);
+
+  // Call getInventoryItem with the pk value
+  const fetchInventoryItem = async () => {
+    try {
+      const data = await getInventoryItem(pk as string);
+      const uid = (data as any).response.results[0].Product;
+      setProductId(uid);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchProduct = async () => {
+    try {
+      const data = await getProduct(productId as any);
+      const result = (data as any).response;
+      setProduct(result)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (pk) {
+      fetchInventoryItem();
+    }
+  }, [pk]);
+
+  useEffect(() => {
+    if (productId) {
+      fetchProduct()
+    }
+  }, [productId]);
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        <img src={`https:${product?.Image}`}/>
+        <span className={styles.token}>1 of 1</span>
+        <h3>{product?.Name}</h3>
+        <span>{product?.Description}</span>
     </main>
   );
-}
+};
