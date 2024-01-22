@@ -57,7 +57,7 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-        <img src={`https:${product?.Image}`}/>
+        <Image src={`https:${product?.Image}`} alt="Product Image" />
         <span className={styles.token}>1 of 1</span>
         <h3>{product?.Name}</h3>
         <span>{product?.Description}</span>
