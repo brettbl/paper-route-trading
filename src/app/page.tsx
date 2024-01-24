@@ -57,7 +57,6 @@ const Home: React.FC = () => {
 
   return (
     <main className={styles.main}>
-      <h1>Home Page</h1>
       {product && (
         <>
           <img src={`https:${product?.Image}`} alt="Product Image"/>
