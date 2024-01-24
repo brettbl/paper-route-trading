@@ -1,11 +1,11 @@
 'use client'
 
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 import styles from "./page.module.css";
 import getInventoryItem from "@/pages/api/getInventoryItem";
 import getProduct from "@/pages/api/getProduct";
-import { useEffect, useState } from "react";
+
 
 interface Product {
   Name: string;
@@ -16,7 +16,7 @@ interface Product {
   Image: string;
 }
 
-export default function Home() {
+const Home: React.FC = () => {
   const searchParams = useSearchParams();
   const pk = searchParams?.get('pk1') 
   const [productId, setProductId] = useState(null);
@@ -57,6 +57,7 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
+      <h1>Home Page</h1>
       {product && (
         <>
           <img src={`https:${product?.Image}`} alt="Product Image"/>
@@ -68,3 +69,5 @@ export default function Home() {
     </main>
   );
 };
+
+export default Home;
