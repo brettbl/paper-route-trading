@@ -17,7 +17,7 @@ interface Product {
 
 const ProductComponent: React.FC = () => {
   const searchParams = useSearchParams();
-  const pk = searchParams?.get('pk1') 
+  const pk = searchParams?.get('pk1') || searchParams?.get('u');
   const [productId, setProductId] = useState(null);
   const [product, setProduct] = useState<Product | null>(null);
 
