@@ -1,11 +1,10 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import getInventoryItem from "@/pages/api/getInventoryItem";
 import getProduct from "@/pages/api/getProduct";
-
 
 interface Product {
   Name: string;
@@ -16,7 +15,7 @@ interface Product {
   Image: string;
 }
 
-const Home: React.FC = () => {
+const ProductComponent: React.FC = () => {
   const searchParams = useSearchParams();
   const pk = searchParams?.get('pk1') 
   const [productId, setProductId] = useState(null);
@@ -69,4 +68,12 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+const Index: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductComponent />
+    </Suspense>
+  );
+};
+
+export default Index;
