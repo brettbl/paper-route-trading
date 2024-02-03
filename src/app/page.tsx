@@ -22,7 +22,6 @@ const ProductComponent: React.FC = () => {
   const e = searchParams?.get('e');
   const [productId, setProductId] = useState(null);
   const [product, setProduct] = useState<Product | null>(null);
-  const [isPass, setIsPass] = useState(false);
   const [response, setResponse] = useState(null);
 
   // Call getInventoryItem with the pk value
@@ -56,10 +55,6 @@ const ProductComponent: React.FC = () => {
       const response = await fetch(`/api/verifyTap?${params}`);
       const data = await response.json();
       setResponse(data.response);
-      if (data.response === "Pass") {
-        setIsPass(true);
-      }
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -86,22 +81,25 @@ const ProductComponent: React.FC = () => {
   return (
     <main className={styles.main}>
       {
-      isPass ? (
-        product && (
-          <>
-            <img src={`https:${product?.Image}`} alt="Product Image"/>
-            <span className={styles.token}>1 of 1</span>
-            <h3>{product?.Name}</h3>
-            <span>{product?.Description}</span>
-            <span>{response}</span>
-          </>
-        )
-      ) : (
-        <div className={styles.fail}>
-            <div className={styles.alert}>Verification failed!</div>
+        response === 'Pass' ? (
+          product && (
+            <>
+              <img src={`https:${product?.Image}`} alt="Product Image"/>
+              <span className={styles.token}>1 of 1</span>
+              <h3>{product?.Name}</h3>
+              <span>{product?.Description}</span>
+            </>
+          )
+        ) : response === 'Fail' ? (
+          <div className={styles.alert}>
+            <div className={styles.fail}>Verification failed</div>
           </div>
-      )
-    }
+        ) : (
+          <div className={styles.alert}>
+            <div className={styles.notification}>Please tap an NFC Chip to proceed</div>
+          </div>
+        )
+      }
     </main>
   );
 };
