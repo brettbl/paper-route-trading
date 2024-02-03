@@ -4,7 +4,8 @@ export default async function getInventoryItem (pk: string) {
         const headers = {
             'Authorization': `Bearer ${process.env.NEXT_PUBLIC_BUBBLE_TOKEN}`
         }
-        const constraints = `[{"key":"publicKey","constraint_type":"equals","value":"${pk.toLowerCase()}"}]`;
+        
+        const constraints = `[{"key":"publicKey","constraint_type":"equals","value":"${pk}"}]`;
         const params = new URLSearchParams({constraints:constraints})
 
         const response = await fetch(`${url}?${params}`, {

@@ -17,7 +17,7 @@ interface Product {
 
 const ProductComponent: React.FC = () => {
   const searchParams = useSearchParams();
-  const pk = searchParams?.get('pk1') || searchParams?.get('u');
+  const pk = searchParams?.get('u') || searchParams?.get('pk1')?.toLowerCase();
   const n = searchParams?.get('n');
   const e = searchParams?.get('e');
   const [productId, setProductId] = useState(null);
@@ -26,7 +26,7 @@ const ProductComponent: React.FC = () => {
   const [response, setResponse] = useState(null);
 
   // Call getInventoryItem with the pk value
-  const fetchInventoryItem = async () => {
+  const fetchInventoryItem = async (pk: string) => {
     try {
       const data = await getInventoryItem(pk as string);
       const uid = (data as any).response.results[0].Product;
@@ -67,7 +67,7 @@ const ProductComponent: React.FC = () => {
 
   useEffect(() => {
     if (pk) {
-      fetchInventoryItem();
+      fetchInventoryItem(pk);
     }
   }, [pk]);
 
@@ -86,7 +86,7 @@ const ProductComponent: React.FC = () => {
   return (
     <main className={styles.main}>
       {
-      // isPass ? (
+      isPass ? (
         product && (
           <>
             <img src={`https:${product?.Image}`} alt="Product Image"/>
@@ -96,9 +96,11 @@ const ProductComponent: React.FC = () => {
             <span>{response}</span>
           </>
         )
-      // ) : (
-      //   <div className={styles.failAlert}>Verification failed!</div>
-      // )
+      ) : (
+        <div className={styles.fail}>
+            <div className={styles.alert}>Verification failed!</div>
+          </div>
+      )
     }
     </main>
   );

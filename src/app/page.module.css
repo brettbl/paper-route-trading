@@ -10,6 +10,21 @@
   width: 100%;
 }
 
+.fail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background: red; /* Changed to red */
+  text-align: center;
+  color: white; /* Added to ensure text is visible on red background */
+}
+
 .description {
   display: inherit;
   justify-content: inherit;
