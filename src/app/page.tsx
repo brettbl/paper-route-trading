@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import getInventoryItem from "@/pages/api/getInventoryItem";
 import getProduct from "@/pages/api/getProduct";
+import Image from "next/image";
 
 interface Product {
   Name: string;
@@ -96,7 +97,9 @@ const ProductComponent: React.FC = () => {
           </div>
         ) : (
           <div className={styles.alert}>
-            <div className={styles.notification}>Please tap an NFC Chip to proceed</div>
+            <div className={styles.loading}>
+              <Image src="/loading.gif" alt="Loading" width={100} height={100} />
+            </div>
           </div>
         )
       }

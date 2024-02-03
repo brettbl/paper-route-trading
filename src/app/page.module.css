@@ -25,12 +25,8 @@
   color: white; /* Added to ensure text is visible on red background */
 }
 
-.notification {
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  background: blue; /* Changed to red */
-  text-align: center;
-  color: white; /* Added to ensure text is visible on red background */
+.loading {
+  width: fit-content;
 }
 
 .description {
