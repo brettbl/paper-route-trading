@@ -47,12 +47,17 @@ const ProductComponent: React.FC = () => {
     }
   };
 
-  const fetchVerification = async () => {
+  const fetchVerification = async (u:string, n:string , e:string) => {
     try {
-      const data = await verifyTap(pk as string, n as string, e as string);
-      const response = (data as any).response;
-      setResponse(response);
-      if (response === "Pass") {
+      const params = new URLSearchParams();
+      params.append('u', u);
+      params.append('n', n);
+      params.append('e', e);
+
+      const response = await fetch(`/api/proxy?${params}`);
+      const data = await response.json();
+      setResponse(data.response);
+      if (data.response === "Pass") {
         setIsPass(true);
       }
       console.log(data);
@@ -75,7 +80,7 @@ const ProductComponent: React.FC = () => {
 
   useEffect(() => {
     if (pk && n && e) {
-      fetchVerification();
+      fetchVerification(pk, n, e);
     }
   }, [pk, n, e]);
 
