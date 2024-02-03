@@ -1,16 +1,21 @@
-export default async function getProduct (u: string, n: string, e: string) {
+// pages/api/proxy.ts
+
+import { NextApiRequest, NextApiResponse } from 'next';
+import fetch from 'node-fetch';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const { u, n, e } = req.query;
+
+    const url = `${process.env.NEXT_PUBLIC_IXKIO_URL}`;
+
+    const params = new URLSearchParams();
+    params.append('a', process.env.NEXT_PUBLIC_IXKIO_ACCOUNT_ID || '');
+    params.append('u', String(u));
+    params.append('n', String(n));
+    params.append('e', String(e));
+
     try {
-        const url = `${process.env.NEXT_PUBLIC_IXKIO_URL}`;
-
-        const params = new URLSearchParams();
-        params.append('a', process.env.NEXT_PUBLIC_IXKIO_ACCOUNT_ID || '');
-        params.append('u', u);
-        params.append('n', n);
-        params.append('e', e);
-
-        const response = await fetch(`${url}?${params}`, {
-            method: 'GET'
-        });
+        const response = await fetch(`${url}?${params}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -18,11 +23,9 @@ export default async function getProduct (u: string, n: string, e: string) {
 
         const data = await response.json();
 
-        // Handle the response data here
-        return data
+        res.status(200).json(data);
     } catch (error) {
-        // Handle the error here
         console.error(error);
-        throw error;
+        res.status(500).json({ error: 'An error occurred while fetching data' });
     }
-};
+}
