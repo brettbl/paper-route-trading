@@ -1,6 +1,6 @@
 export default async function getProduct (u: string, n: string, e: string) {
     try {
-        const url = `${process.env.NEXT_PUBLIC_NEXT_PUBLIC_IXKIO_URL}`;
+        const url = `${process.env.NEXT_PUBLIC_IXKIO_URL}`;
 
         const params = new URLSearchParams();
         params.append('a', process.env.NEXT_PUBLIC_IXKIO_ACCOUNT_ID || '');
