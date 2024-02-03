@@ -24,6 +24,7 @@ const ProductComponent: React.FC = () => {
   const [productId, setProductId] = useState(null);
   const [product, setProduct] = useState<Product | null>(null);
   const [isPass, setIsPass] = useState(false);
+  const [response, setResponse] = useState(null);
 
   // Call getInventoryItem with the pk value
   const fetchInventoryItem = async () => {
@@ -49,8 +50,9 @@ const ProductComponent: React.FC = () => {
   const fetchVerification = async () => {
     try {
       const data = await verifyTap(pk as string, n as string, e as string);
-      const resonse = (data as any).response;
-      if (resonse === "Pass") {
+      const response = (data as any).response;
+      setResponse(response);
+      if (response === "Pass") {
         setIsPass(true);
       }
       console.log(data);
@@ -79,18 +81,21 @@ const ProductComponent: React.FC = () => {
 
   return (
     <main className={styles.main}>
-      {isPass ? (
+      {
+      // isPass ? (
         product && (
           <>
             <img src={`https:${product?.Image}`} alt="Product Image"/>
             <span className={styles.token}>1 of 1</span>
             <h3>{product?.Name}</h3>
             <span>{product?.Description}</span>
+            <span>{response}</span>
           </>
         )
-      ) : (
-        <div className={styles.failAlert}>Verification failed!</div>
-      )}
+      // ) : (
+      //   <div className={styles.failAlert}>Verification failed!</div>
+      // )
+    }
     </main>
   );
 };
