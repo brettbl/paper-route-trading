@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import getInventoryItem from "@/pages/api/getInventoryItem";
 import getProduct from "@/pages/api/getProduct";
-import verifyTap from "@/pages/api/verifyTap";
 
 interface Product {
   Name: string;
@@ -54,7 +53,7 @@ const ProductComponent: React.FC = () => {
       params.append('n', n);
       params.append('e', e);
 
-      const response = await fetch(`/api/proxy?${params}`);
+      const response = await fetch(`/api/verifyTap?${params}`);
       const data = await response.json();
       setResponse(data.response);
       if (data.response === "Pass") {

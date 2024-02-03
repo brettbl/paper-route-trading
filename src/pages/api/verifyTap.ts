@@ -1,5 +1,3 @@
-// pages/api/proxy.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import fetch from 'node-fetch';
 
