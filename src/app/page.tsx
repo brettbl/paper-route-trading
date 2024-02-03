@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import getInventoryItem from "@/pages/api/getInventoryItem";
 import getProduct from "@/pages/api/getProduct";
+import verifyTap from "@/pages/api/verifyTap";
 
 interface Product {
   Name: string;
@@ -18,8 +19,11 @@ interface Product {
 const ProductComponent: React.FC = () => {
   const searchParams = useSearchParams();
   const pk = searchParams?.get('pk1') || searchParams?.get('u');
+  const n = searchParams?.get('n');
+  const e = searchParams?.get('e');
   const [productId, setProductId] = useState(null);
   const [product, setProduct] = useState<Product | null>(null);
+  const [isPass, setIsPass] = useState(false);
 
   // Call getInventoryItem with the pk value
   const fetchInventoryItem = async () => {
@@ -42,6 +46,19 @@ const ProductComponent: React.FC = () => {
     }
   };
 
+  const fetchVerification = async () => {
+    try {
+      const data = await verifyTap(pk as string, n as string, e as string);
+      const resonse = (data as any).response;
+      if (resonse === "Pass") {
+        setIsPass(true);
+      }
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (pk) {
       fetchInventoryItem();
@@ -54,15 +71,25 @@ const ProductComponent: React.FC = () => {
     }
   }, [productId]);
 
+  useEffect(() => {
+    if (pk && n && e) {
+      fetchVerification();
+    }
+  }, [pk, n, e]);
+
   return (
     <main className={styles.main}>
-      {product && (
-        <>
-          <img src={`https:${product?.Image}`} alt="Product Image"/>
-          <span className={styles.token}>1 of 1</span>
-          <h3>{product?.Name}</h3>
-          <span>{product?.Description}</span>
-        </>
+      {isPass ? (
+        product && (
+          <>
+            <img src={`https:${product?.Image}`} alt="Product Image"/>
+            <span className={styles.token}>1 of 1</span>
+            <h3>{product?.Name}</h3>
+            <span>{product?.Description}</span>
+          </>
+        )
+      ) : (
+        <div className={styles.failAlert}>Verification failed!</div>
       )}
     </main>
   );

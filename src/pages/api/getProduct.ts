@@ -1,4 +1,4 @@
-export default async function getInventoryItem (uid: string) {
+export default async function getProduct (uid: string) {
     try {
         const url = `${process.env.NEXT_PUBLIC_BUBBLE_URL}/Product/${uid}`;
         const headers = {
