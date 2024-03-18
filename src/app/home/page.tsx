@@ -1,12 +1,12 @@
 import React from 'react';
 
-const Imagery: React.FC = () => {
+const History: React.FC = () => {
     return (
         <div>
-            <h1>Imagery Page</h1>
+            <h1>Home Page</h1>
             {/* Add your content here */}
         </div>
     );
 };
 
-export default Imagery;
+export default History;

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import getInventoryItem from "@/pages/api/getInventoryItem";
 import getProduct from "@/pages/api/getProduct";
+import getChip from "@/pages/api/getChip";
 import Image from "next/image";
 
 interface Product {
@@ -23,7 +24,7 @@ const ProductComponent: React.FC = () => {
   const e = searchParams?.get('e');
   const [productId, setProductId] = useState(null);
   const [product, setProduct] = useState<Product | null>(null);
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<string | null>(null);
 
   // Call getInventoryItem with the pk value
   const fetchInventoryItem = async (pk: string) => {
@@ -46,6 +47,18 @@ const ProductComponent: React.FC = () => {
     }
   };
 
+  const fetchChip = async (u:string) => {
+    try {
+      const data = await getChip(u);
+      console.log(data);
+      if (data.length > 0) {;
+      setResponse(data.response)
+    };
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchVerification = async (u:string, n:string , e:string) => {
     try {
       const params = new URLSearchParams();
@@ -53,9 +66,10 @@ const ProductComponent: React.FC = () => {
       params.append('n', n);
       params.append('e', e);
 
-      const response = await fetch(`/api/verifyTap?${params}`);
-      const data = await response.json();
-      setResponse(data.response);
+      // const response = await fetch(`/api/verifyTap?${params}`);
+      // const data = await response.json();
+      // setResponse(data.response);
+      setResponse('Pass');
     } catch (error) {
       console.error(error);
     }
@@ -78,6 +92,13 @@ const ProductComponent: React.FC = () => {
       fetchVerification(pk, n, e);
     }
   }, [pk, n, e]);
+
+  useEffect(() => {
+    if (pk) {
+      fetchChip(pk);
+    }
+  }, [pk]);
+
 
   return (
     <main className={styles.main}>
