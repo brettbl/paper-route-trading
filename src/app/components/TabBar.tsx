@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { ProductContext } from './AppContext';
+import { ProductContext, Tab } from './AppContext';
 import '../App.css';
 
 export default function TabBar() {
@@ -13,11 +13,11 @@ export default function TabBar() {
 
     useEffect(() => {
         if (!selectedTab && imageryTabs.length > 0) {
-            setSelectedTab(imageryTabs[0].id);
+            setSelectedTab(imageryTabs[0]);
         }
     }, [selectedTab, imageryTabs, setSelectedTab]);
 
-    const handleTabClick = (tab) => {
+    const handleTabClick = (tab: Tab) => {
         setSelectedTab(tab);
     };
 
@@ -26,10 +26,10 @@ export default function TabBar() {
             <div className='Tab-Container'>
                 <div className='Tab-Row'>
                     {imageryTabs.map((item) => (
-                        <div 
+                        <div
                             key={item.id} // Add a key prop to each child in a list
-                            className={`Tab-Item ${selectedTab === item.id ? 'selected' : ''}`} 
-                            onClick={() => handleTabClick(item.id)}
+                            className={`Tab-Item ${selectedTab?.id === item.id ? 'selected' : ''}`}
+                            onClick={() => handleTabClick(item)}
                         >
                             {item.name}
                         </div>

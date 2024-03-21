@@ -1,15 +1,10 @@
 import React, { useContext, ComponentType, FC } from 'react';
-import { ProductContext } from './AppContext'; // Import your context
+import { ProductContext, ProductContextType } from './AppContext';
 import './Components.css';
-
-interface ProductContextType {
-    product: string | null;
-    response: string | null;
-}
 
 function withProductCheck(WrappedComponent: ComponentType<any>): FC {
     return function WithProductCheck(props: any) {
-        const { product, response } = useContext<ProductContextType>(ProductContext as React.Context<ProductContextType>);
+        const { product, response } = useContext<ProductContextType>(ProductContext);
         // If product is available but response is 'Fail', return an error message
         if (response === 'Fail') {
             return (

@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect, createContext, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getData, searchData } from '../../pages/api/bubbleAPI';
@@ -21,13 +22,14 @@ interface Product {
     isTransferred: boolean;
 }
 
-interface Tab {
+export interface Tab {
     name: string;
     id: string;
 }
 
-interface ProductContextType {
+export interface ProductContextType {
     product: Product | null;
+    response: any | null;
     imageryTabs: Tab[];
     selectedTab: Tab | null;
     setSelectedTab: (tab: Tab | null) => void;
@@ -44,14 +46,24 @@ const config = {
 };
 const alchemy = new Alchemy(config);
 
-export const ProductContext = createContext<ProductContextType | undefined>(undefined);
+export const ProductContext = createContext<ProductContextType>({
+    product: null,
+    response: null,
+    imageryTabs: [],
+    selectedTab: null,
+    setSelectedTab: () => { },
+    repairTypes: [],
+    repairsCount: null,
+    isClaimed: false,
+    setIsClaimed: () => { },
+    isOwner: false,
+});
 
 interface ProductProviderProps {
     children: ReactNode;
 }
 
-export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
-
+export const ProductProvider = ({ children }: ProductProviderProps) => {
     const [pk1, setPk1] = useState<string | null>(null);
     const [u, setU] = useState<string | null>(null);
     const [n, setN] = useState<string | null>(null);
@@ -65,7 +77,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
     const location = useLocation();
     const address = useAddress();
 
-    const verifyOwnership = async (address:string, contractAddress:string) => {
+    const verifyOwnership = async (address: string, contractAddress: string) => {
         try {
             let options = {
                 contractAddresses: [contractAddress]
@@ -85,7 +97,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
         }
     }, [address, product]);
 
-    const fetchVerification = async (u:string, n:string, e:string) => {
+    const fetchVerification = async (u: string, n: string, e: string) => {
         try {
             const params = new URLSearchParams();
             params.append('u', u);
@@ -101,7 +113,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
         }
     };
 
-    const fetchProduct = async (productId:string, inventoryId:string, tokenId:number, solaireWalletAddress:string, isTransferred:boolean) => {
+    const fetchProduct = async (productId: string, inventoryId: string, tokenId: number, solaireWalletAddress: string, isTransferred: boolean) => {
         const response = await getData('Product', productId);
         setProduct({
             id: productId,
@@ -121,7 +133,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
         });
     };
 
-    const fetchOrderItem = async (orderItemId:string) => {
+    const fetchOrderItem = async (orderItemId: string) => {
         const response = await getData('OrderItem', orderItemId);
         setIsClaimed(response.isRedeemed);
     };
@@ -184,7 +196,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
     }, [product]);
 
     return (
-        <ProductContext.Provider value={{ product, imageryTabs, selectedTab, setSelectedTab, isClaimed, setIsClaimed, isOwner, repairTypes: [], repairsCount: null }}>
+        <ProductContext.Provider value={{ product, response, imageryTabs, selectedTab, setSelectedTab, isClaimed, setIsClaimed, isOwner, repairTypes: [], repairsCount: null }}>
             {children}
         </ProductContext.Provider>
     );

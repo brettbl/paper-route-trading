@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const convertToBase64 = (file) => {
+const convertToBase64 = (file: any) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result);
@@ -11,7 +11,7 @@ const convertToBase64 = (file) => {
 };
 
 // Function to make a GET request
-export async function searchData(endpoint, payload) {
+export async function searchData(endpoint: string, payload: any) {
     try {
         const url = `${process.env.REACT_APP_BUBBLE_URL}${endpoint}`
         const header = {
@@ -29,7 +29,7 @@ export async function searchData(endpoint, payload) {
     }
 }
 
-export async function getData(endpoint, uid) {
+export async function getData(endpoint: string, uid: string) {
     try {
         const url = `${process.env.REACT_APP_BUBBLE_URL}${endpoint}/${uid}`
         const header = {
@@ -44,7 +44,7 @@ export async function getData(endpoint, uid) {
     }
 }
 
-export async function updateData(endpoint, uid, data) {
+export async function updateData(endpoint: string, uid: string, data: any) {
     try {
         const url = `${process.env.REACT_APP_BUBBLE_URL}${endpoint}/${uid}`
         const header = {
@@ -59,7 +59,7 @@ export async function updateData(endpoint, uid, data) {
     }
 }
 
-export async function uploadFile(file) {
+export async function uploadFile(file: any) {
     const url = process.env.REACT_APP_UPLOAD_ENDPOINT
     const headers = {
         'Accept': 'application/json',
@@ -74,12 +74,12 @@ export async function uploadFile(file) {
         private: false,
     };
 
-    return fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(data) })
+    return fetch(url!, { method: 'POST', headers: headers, body: JSON.stringify(data) })
         .then(response => response.json())
         .catch(error => console.error('Error:', error));
 }
 
-export async function postData(endpoint, data) {
+export async function postData(endpoint: string, data: any) {
     const url = `${process.env.REACT_APP_BUBBLE_URL}${endpoint}`;
     const header = {
         "Accept": "application/json",
