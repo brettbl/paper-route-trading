@@ -2,15 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useConnectionStatus } from '@thirdweb-dev/react';
-import { menuItems } from './Pages';
+import { MenuItem, menuItems } from './Pages';
 import './Components.css';
-import logo_blk from '../img/logo100_blk.png';
-import logo from '../img/logo100.png';
+// import logo_blk from '../img/logo100_blk.png';
+// import logo from '../img/logo100.png';
 import { ProductContext } from './AppContext';
 
 function NavBar() {
-  const [selected, setSelected] = useState(null);
-  const [tabs, setTabs] = useState([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [tabs, setTabs] = useState<MenuItem[]>([]);
   const location = useLocation();
   const connectionStatus = useConnectionStatus();
   const { isClaimed, isOwner } = useContext(ProductContext);
@@ -24,7 +24,7 @@ function NavBar() {
   }, [location]);
 
   useEffect(() => {
-    setTabs(menuItems
+    const tabs = menuItems
       .filter(item => {
         if (!isClaimed && item.name.toLowerCase() === 'claim') {
           return true; // If isClaimed is true, do not include the "claim" tab
@@ -36,7 +36,9 @@ function NavBar() {
           return false;
         }
         return true;
-      }))
+      });
+
+    setTabs(tabs);
   }, [isClaimed, isOwner, connectionStatus]);
 
   return (
@@ -54,7 +56,9 @@ function NavBar() {
             }}
           >
             {item.icon === 'logo' ?
-              <img src={selected === item.route ? logo : logo_blk} style={{ height: '21px' }} alt="logo" />
+              // TODO: Fix the following line
+              // <img src={selected === item.route ? logo : logo_blk} style={{ height: '21px' }} alt="logo" />
+              <img src={selected === item.route ? "logo" : "logo_blk"} style={{ height: '21px' }} alt="logo" />
               :
               <FontAwesomeIcon
                 icon={item.icon}
